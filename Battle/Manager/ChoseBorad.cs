@@ -12,7 +12,8 @@ public class ChoseBorad : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        
+    {   
+        ///SSSSS
+        /// AAA
     }
 }
