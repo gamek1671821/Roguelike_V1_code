@@ -29,7 +29,7 @@ public class Event007 : EventBase
             }
             else
             {
-                NoChainEvent();
+                GoTobattle();
             }
         }
         else
@@ -44,20 +44,17 @@ public class Event007 : EventBase
                 }
                 else
                 {
-                    NoChainEvent();
+                    GoTobattle();
                 }
             }
             else
             {
-                NoChainEvent();
+                GoTobattle();
             }
             UnityEngine.SceneManagement.SceneManager.LoadScene("battleScene");
         }
     }
-    private void NoChainEvent()
-    {
-        GodManager.Instance.Res = 10017;
-    }
+    
     public void Button1A()
     {
         if (!choseDone)

@@ -63,21 +63,21 @@ public class Enemy10007_Spider : Enemy
             case 0:
                 break;
             case 1:
-                deffend.gameObject.SetActive(false);
+                deffend.gameObject.SetActive(true);
                 attack.gameObject.SetActive(false);
                 poisonedAttack.gameObject.SetActive(false);
                 ShowDamageTip(deffend.gameObject, DefendCheck(), "", "blue");
                 break;
             case 2:
                 deffend.gameObject.SetActive(false);
-                attack.gameObject.SetActive(false);
+                attack.gameObject.SetActive(true);
                 poisonedAttack.gameObject.SetActive(false);
                 ShowDamageTip(attack.gameObject, AttackCheck(), "直擊：1回3毒");
                 break;
             case 3:
                 deffend.gameObject.SetActive(false);
                 attack.gameObject.SetActive(false);
-                poisonedAttack.gameObject.SetActive(false);
+                poisonedAttack.gameObject.SetActive(true);
                 ShowDamageTip(poisonedAttack.gameObject, AttackCheck() + FightManager.Instance.deBuffsVal[(int)DeBuffType.poisoned] * 2, "中毒增傷");
                 break;
 

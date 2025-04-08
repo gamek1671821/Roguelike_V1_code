@@ -7,7 +7,7 @@ using UnityEngine;
 public class EnemyManager
 {
     public static EnemyManager Instance = new EnemyManager();
-    public Dictionary<string, string> levelData;
+    public Dictionary<string, string> data;
     public List<Enemy> enemyList; //存儲的戰鬥中的敵人
     public int allenemy;
     /// <summary>
@@ -23,14 +23,14 @@ public class EnemyManager
         //
         enemyList = new List<Enemy>();
         //讀取關卡表
-        levelData = GameConfigManager.Instance.GetlevelById(id);
+        data = GameConfigManager.Instance.GetlevelById(id);
 
-        enemyOrEventIds = levelData["EnemysIds"].Split('=');//讀取敵人訊息  或是 事件訊息
-        GameObject.FindGameObjectWithTag("manager").GetComponent<GodManager>().isBattle = levelData["isBattle"] == "Y";
-        if (levelData["isBattle"] == "Y")
+        enemyOrEventIds = data["EnemysIds"].Split('=');//讀取敵人訊息  或是 事件訊息
+        GameObject.FindGameObjectWithTag("manager").GetComponent<GodManager>().isBattle = data["isBattle"] == "Y";
+        if (data["isBattle"] == "Y")
         { //讀取敵人訊息 
 
-            enemyPos = levelData["Pos"].Split('='); //敵人位置訊息
+            enemyPos = data["Pos"].Split('='); //敵人位置訊息
             for (int i = 0; i < enemyOrEventIds.Length; i++)
             {
                 string enemyId = enemyOrEventIds[i];

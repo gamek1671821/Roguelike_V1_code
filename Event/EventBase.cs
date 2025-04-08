@@ -11,16 +11,19 @@ using UnityEngine.UI;
 
 public class EventBase : MonoBehaviour
 {
-    choseboard cb;
+    public choseboard cb;
     public Transform canvesTf;
     public bool choseDone;
     public GameObject EndBord;
     public UnityEngine.Object storyBoard;
     public Dictionary<string, string> data;
+    public string[] itemConditions, levelCondition, battleEx;
+
     public void Init(Dictionary<string, string> eventData)
     {
         choseDone = false;
         data = eventData.ToDictionary(entry => entry.Key, entry => entry.Value); // 複製 字典
+        SpitData();
         cb = GetComponent<choseboard>();
         cb.Init(int.Parse(data["CardCount"]), int.Parse(data["ChooseCount"]), 1); //設定有幾個按鈕
         canvesTf = GameObject.FindGameObjectWithTag("World_Canves").transform;
@@ -104,4 +107,28 @@ public class EventBase : MonoBehaviour
         await Task.Delay(1); // 等待 1 毫秒，避免無限迴圈卡住主線程
         FightManager.Instance.ChangeType(FightType.Back);
     }
+    private void SpitData()
+    {
+        itemConditions = data["ItemCondition"].Split('=');//讀取 "前置道具"
+        levelCondition = data["LevelCondition"].Split('=');//讀取 "前置關卡"
+        battleEx = data["battleEx"].Split('=');//讀取 "等效關卡"
+    }
+    public void ItemCondition(string input)
+    {
+        if (Enum.TryParse(typeof(ItemData), input, out var result))
+        {
+            int itemValue = (int)result;
+            Console.WriteLine(itemValue);  // 輸出 1001
+        }
+        else
+        {
+            Console.WriteLine("無效的項目名稱");
+        }
+    }
+    public void GoTobattle()
+    {
+        int battleRandom = UnityEngine.Random.Range(0, battleEx.Length); //抽出其中一個 等效關卡
+        GodManager.Instance.Res = int.Parse(battleEx[battleRandom]);
+    }
+
 }

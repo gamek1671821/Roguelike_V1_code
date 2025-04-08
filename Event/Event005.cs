@@ -18,16 +18,18 @@ public class Event005 : EventBase
     }
     public override void CreatButtonOrNextStory()
     {
-        if (!MyFuns.Instance.level.levelDone.Contains(int.Parse(data["Id"])))
+        if (!MyFuns.Instance.level.levelDone.Contains(int.Parse(data["Id"]))) // 如果 沒有執行過這個關卡 
         {
-            storyBoard.GetComponentInChildren<TextMeshProUGUI>().text = CustomizedStory();
-
+            storyBoard.GetComponentInChildren<TextMeshProUGUI>().text = CustomizedStory(); //
 
             ButtonSetting(Button0, "等到魔物離去", 0);
             ButtonSetting(Button1, "加入戰鬥", 1);
         }
         else
         {
+            storyBoard.GetComponent<Transform>().gameObject.SetActive(false);
+            cb.GetComponent<Transform>().gameObject.SetActive(false);
+
             int PlayerLevel = PlayerPrefs.GetInt("Level" + GodManager.Instance.SaveData_ID);
             if (PlayerLevel >= int.Parse(data["NextLevel"])) //如果玩家的等級 (地城通關等級) >= 1 {可以進入第2層}
             {
@@ -44,8 +46,9 @@ public class Event005 : EventBase
             }
             else //如果等級不足 開啟戰鬥關卡
             {
-                GodManager.Instance.Res = 10002;
+                GoTobattle();
             }
+
             UnityEngine.SceneManagement.SceneManager.LoadScene("battleScene");
         }
     }

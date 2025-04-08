@@ -20,16 +20,16 @@ public class Event006 : EventBase
     {
         if (!MyFuns.Instance.level.levelDone.Contains(int.Parse(data["Id"]))) //沒有執行過10021
         {
-            if (RoleManager.Instance.roleItem.ItemList.Contains(((int)ItemData.BeastNecklace).ToString()))
+            if (RoleManager.Instance.roleItem.ItemList.Contains(((int)ItemData.BeastNecklace).ToString())) //擁有項鍊
             {
-                storyBoard.GetComponentInChildren<TextMeshProUGUI>().text = CustomizedStory();
+                storyBoard.GetComponentInChildren<TextMeshProUGUI>().text = CustomizedStory(); //
 
                 ButtonSetting(Button0A, "以100金幣要求她買下", 0);
                 ButtonSetting(Button0B, "將項鍊還給她", 1);
             }
             else
             {
-                NoChainEvent();
+                GoTobattle();
             }
         }
         else
@@ -44,20 +44,17 @@ public class Event006 : EventBase
                 }
                 else
                 {
-                    NoChainEvent();
+                    GoTobattle();
                 }
             }
             else
             {
-                NoChainEvent();
+                GoTobattle();
             }
             UnityEngine.SceneManagement.SceneManager.LoadScene("battleScene");
         }
     }
-    private void NoChainEvent()
-    {
-        GodManager.Instance.Res = 10017;
-    }
+
     public void Button0A()
     {
         if (!choseDone)
