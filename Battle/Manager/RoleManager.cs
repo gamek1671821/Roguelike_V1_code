@@ -156,6 +156,10 @@ public class RoleManager
         // roleCard.cardList.Add("1087");
         // roleCard.cardList.Add("1088");
         // roleCard.cardList.Add("1090");
+        roleCard.cardList.Add("1091");
+        roleCard.cardList.Add("1093");
+        roleCard.cardList.Add("1094");
+        roleCard.cardList.Add("1095");
         SaveCardList();
     }
     public void ChangeNewCard(string cardID, bool isDelete)

@@ -27,7 +27,7 @@ public class Card02_AddCard : CardItem
     }
     public override bool TryUse()
     {
-        int cost = int.Parse(data["Expend"]);
+        int cost = totalCost;
         if (!FightManager.Instance.canUseCard)
         {
             UIManager.Instance.showTip("等待其他卡片效果結束", Color.red);

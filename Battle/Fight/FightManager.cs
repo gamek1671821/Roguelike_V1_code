@@ -11,11 +11,11 @@ public enum FightType
 }
 public enum BuffType
 {
-    power, hard, intellect, rebound, powerpoisoned, Lucky, ForeverShield, crazyIntellect, crazyPower, crazyPosion, CondenseKnife, Draw, Speed, Lurk, DragonPower
+    power, hard, intellect, rebound, powerpoisoned, Lucky, ForeverShield, crazyIntellect, crazyPower, crazyPosion, CondenseKnife, Draw, Speed, Lurk, DragonPower, light
 }
 public enum DeBuffType
 {
-    burn, poisoned, dePower, deHard, deIntellect, dizz, paralysis, disappoint, deRebound, target
+    burn, poisoned, dePower, deHard, deIntellect, dizz, paralysis, disappoint, deRebound, target, heavy
 }
 
 /// <summary>
@@ -212,6 +212,20 @@ public class FightManager : MonoBehaviour
         }
         SetBuffItem();
         SetDeBuffItem();
+    }
+    public void Light_Heavy_TurnDown()
+    {
+        deBuffsTurn[(int)DeBuffType.heavy] -= 1;
+        buffsTurn[(int)BuffType.light] -= 1;
+        SetBuffItem();
+        SetDeBuffItem();
+    }
+    public void AllHandCardCostChange()
+    {
+        for (int i = 0; i < FightUI.Instance.handCardItemList.Count; i++)
+        {
+            FightUI.Instance.handCardItemList[i].CostTxtChange(); //卡片效果結束，重新計算卡牌cost
+        }
     }
     public void ChangeType(FightType type)
     {

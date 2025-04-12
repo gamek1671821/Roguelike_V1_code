@@ -32,13 +32,13 @@ public class Card86_SpeedUpAttack : CardItem, IPointerDownHandler
     }
     public override bool TryUse()
     {
-        int cost = int.Parse(data["Expend"]);
+        int cost = totalCost;
         if (!FightManager.Instance.canUseCard)
         {
             UIManager.Instance.showTip("等待其他卡片效果結束", Color.red);
             return false;
         }
-        else if (cost >= FightManager.Instance.CurHp)
+        else if (cost > FightManager.Instance.CurHp)
         {
             //費用不足
             AudioManager.Instance.PlayEffect("Effect/lose"); //使用失敗音效

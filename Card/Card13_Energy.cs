@@ -25,7 +25,7 @@ public class Card13_Energy : CardItem
 
     public override bool TryUse()
     {
-        int cost = int.Parse(data["Arg0"]);
+        int cost = totalCost;
         if (!FightManager.Instance.canUseCard)
         {
             UIManager.Instance.showTip("等待其他卡片效果結束", Color.red);

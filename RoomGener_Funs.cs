@@ -463,5 +463,159 @@ public class RoomGener_Funs
             room.SetIcon();
         }
     }
+    
+    public void SetRoomDestroy(RoomGenerator RG)
+    {
+        int destroyCount = RG.CanDestroyRooms.Count / 10;
+        int destroyed = 0;
+
+        List<GameObject> availableRooms = new List<GameObject>(RG.CanDestroyRooms);
+        RG.DestroyedRooms.Clear(); // 清空舊記錄
+
+        while (destroyed < destroyCount && availableRooms.Count > 0)
+        {
+            int randomPick = Random.Range(0, availableRooms.Count);
+            GameObject roomObj = availableRooms[randomPick];
+            Room_Base pickRoom = roomObj.GetComponent<Room_Base>();
+            availableRooms.RemoveAt(randomPick);
+
+            if (!roomObj.activeSelf || pickRoom.oriDoorCount <= 2) continue;
+            if (!CanDestroyRoom(pickRoom, RG)) continue;
+
+            // 模擬刪除並檢查連通性
+            roomObj.SetActive(false);
+            bool stillConnected = IsMapConnected(RG);
+            roomObj.SetActive(true);
+
+            if (stillConnected)
+            {
+                CloseAdjacentDoors(pickRoom, RG);
+                roomObj.SetActive(false);
+                RG.DestroyedRooms.Add(roomObj);
+                destroyed++;
+            }
+        }
+
+        Debug.Log($"刪除成功：{destroyed} 間房間（目標：{destroyCount}）");
+    }
+    private bool IsMapConnected(RoomGenerator RG)
+    {
+        HashSet<GameObject> visited = new HashSet<GameObject>();
+        Queue<GameObject> queue = new Queue<GameObject>();
+
+        // 找第一個啟用的房間作為起點
+        GameObject startRoom = RG.CanDestroyRooms.Find(r => r.activeSelf);
+        if (startRoom == null) return false;
+
+        queue.Enqueue(startRoom);
+        visited.Add(startRoom);
+
+        while (queue.Count > 0)
+        {
+            GameObject current = queue.Dequeue();
+            Room_Base room = current.GetComponent<Room_Base>();
+
+            // 往四個方向探索
+            ExploreNeighbor(room, RG, Vector3.forward * RG.z_Offset, visited, queue, room.doorUp_ison);
+            ExploreNeighbor(room, RG, Vector3.back * RG.z_Offset, visited, queue, room.doorDown_ison);
+            ExploreNeighbor(room, RG, Vector3.left * RG.x_Offset, visited, queue, room.doorLeft_ison);
+            ExploreNeighbor(room, RG, Vector3.right * RG.x_Offset, visited, queue, room.doorRight_ison);
+        }
+
+        // 只要能訪問到所有啟用房間，就算連通
+        int activeCount = RG.CanDestroyRooms.Count(r => r.activeSelf);
+        return visited.Count >= activeCount;
+    }
+    private void ExploreNeighbor(Room_Base fromRoom, RoomGenerator RG, Vector3 offset, HashSet<GameObject> visited, Queue<GameObject> queue, bool hasDoor)
+    {
+        if (!hasDoor) return;
+
+        Vector3 checkPos = MyFuns.Instance.T2V(fromRoom.transform) + offset;
+        Collider[] hits = Physics.OverlapSphere(checkPos, 0.2f, RG.roomLayer);
+
+        if (hits.Length > 0)
+        {
+            GameObject neighborObj = hits[0].gameObject;
+            if (neighborObj.activeSelf && !visited.Contains(neighborObj))
+            {
+                visited.Add(neighborObj);
+                queue.Enqueue(neighborObj);
+            }
+        }
+    }
+
+    private bool CanDestroyRoom(Room_Base room, RoomGenerator RG)
+    {
+        Vector3 pos = MyFuns.Instance.T2V(room.transform);
+
+        bool upOK = !room.doorUp_ison || GetRoomAt(pos + Vector3.forward * RG.z_Offset, RG)?.oriDoorCount > 2;
+        bool downOK = !room.doorDown_ison || GetRoomAt(pos + Vector3.back * RG.z_Offset, RG)?.oriDoorCount > 2;
+        bool leftOK = !room.doorLeft_ison || GetRoomAt(pos + Vector3.left * RG.x_Offset, RG)?.oriDoorCount > 2;
+        bool rightOK = !room.doorRight_ison || GetRoomAt(pos + Vector3.right * RG.x_Offset, RG)?.oriDoorCount > 2;
+
+        return upOK && downOK && leftOK && rightOK;
+    }
+    private Room_Base GetRoomAt(Vector3 pos, RoomGenerator RG)
+    {
+        Collider[] hits = Physics.OverlapSphere(pos, 0.2f, RG.roomLayer);
+        if (hits.Length > 0)
+            return hits[0].GetComponent<Room_Base>();
+        return null;
+    }
+    private void CloseAdjacentDoors(Room_Base room, RoomGenerator RG)
+    {
+        Vector3 pos = MyFuns.Instance.T2V(room.transform);
+
+        if (room.doorUp_ison)
+        {
+            Room_Base r = GetRoomAt(pos + Vector3.forward * RG.z_Offset, RG);
+            if (r != null) r.doorDown_ison = false;
+        }
+        if (room.doorDown_ison)
+        {
+            Room_Base r = GetRoomAt(pos + Vector3.back * RG.z_Offset, RG);
+            if (r != null) r.doorUp_ison = false;
+        }
+        if (room.doorLeft_ison)
+        {
+            Room_Base r = GetRoomAt(pos + Vector3.left * RG.x_Offset, RG);
+            if (r != null) r.doorRight_ison = false;
+        }
+        if (room.doorRight_ison)
+        {
+            Room_Base r = GetRoomAt(pos + Vector3.right * RG.x_Offset, RG);
+            if (r != null) r.doorLeft_ison = false;
+        }
+
+        // 自己的門也要關
+        room.doorUp_ison = false;
+        room.doorDown_ison = false;
+        room.doorLeft_ison = false;
+        room.doorRight_ison = false;
+    }
+
+
+    // private void TryCloseNeighborDoor(Room_Base room, RoomGenerator RG, bool hasDoor, Vector3 offset, System.Action<Room_Base> closeAction)
+    // {
+    //     if (!hasDoor) return;
+
+    //     Vector3 checkPos = MyFuns.Instance.T2V(room.transform) + offset;
+    //     Collider[] hits = Physics.OverlapSphere(checkPos, 0.2f, RG.roomLayer);
+    //     if (hits.Length == 0) return;
+
+    //     Room_Base neighbor = hits[0].GetComponent<Room_Base>();
+    //     closeAction(neighbor);
+    // }
+    // private bool CheckNeighborDoor(Room_Base room, RoomGenerator RG, bool hasDoor, Vector3 offset)
+    // {
+    //     if (!hasDoor) return true;
+
+    //     Vector3 checkPos = MyFuns.Instance.T2V(room.transform) + offset;
+    //     Collider[] hits = Physics.OverlapSphere(checkPos, 0.2f, RG.roomLayer);
+    //     if (hits.Length == 0) return false;
+
+    //     Room_Base neighbor = hits[0].GetComponent<Room_Base>();
+    //     return neighbor.oriDoorCount > 2;
+    // }
 
 }

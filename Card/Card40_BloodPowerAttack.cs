@@ -30,7 +30,7 @@ public class Card40_BloodPowerAttack : CardItem, IPointerDownHandler
     }
     public override bool TryUse()
     {
-        int cost = int.Parse(data["Expend"]);
+          int cost = totalCost;
         int costPoisoned = FightManager.Instance.deBuffsVal[(int)DeBuffType.poisoned];
         bool isLowHp = FightManager.Instance.CurHp <= FightManager.Instance.MaxHp * 0.3f;
         if (!FightManager.Instance.canUseCard)

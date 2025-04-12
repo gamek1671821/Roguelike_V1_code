@@ -30,7 +30,6 @@ public class MyFuns
     public void LoadLevel()
     {
         level = JsonUtility.FromJson<Level>(PlayerPrefs.GetString("LevelDataSaver" + GodManager.Instance.SaveData_ID));
-        Debug.Log("AA");
     }
     public void Init()
     {
@@ -151,6 +150,10 @@ public class MyFuns
                     break;
             }
         }
+    }
+    public Vector3 T2V(Transform input)
+    {
+        return new Vector3(input.position.x, input.position.y, input.position.z);
     }
 }
 

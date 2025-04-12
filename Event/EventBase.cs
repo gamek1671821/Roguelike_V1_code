@@ -109,8 +109,8 @@ public class EventBase : MonoBehaviour
     }
     private void SpitData()
     {
-        itemConditions = data["ItemCondition"].Split('=');//讀取 "前置道具"
-        levelCondition = data["LevelCondition"].Split('=');//讀取 "前置關卡"
+        //itemConditions = data["ItemCondition"].Split('=');//讀取 "前置道具"
+        //levelCondition = data["LevelCondition"].Split('=');//讀取 "前置關卡"
         battleEx = data["battleEx"].Split('=');//讀取 "等效關卡"
     }
     public void ItemCondition(string input)

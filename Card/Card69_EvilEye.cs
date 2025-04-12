@@ -31,7 +31,7 @@ public class Card69_EvilEye : CardItem, IPointerDownHandler
     {
         string useCard = FightManager.Instance.lastCardType;
         bool canUse = useCard == "10007" || useCard == "10008"; // 法術後
-        int cost = int.Parse(data["Expend"]);
+        int cost = totalCost;
         if (!FightManager.Instance.canUseCard)
         {
             UIManager.Instance.showTip("等待其他卡片效果結束", UnityEngine.Color.red);

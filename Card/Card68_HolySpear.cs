@@ -23,9 +23,9 @@ public class Card68_HolySpear : CardItem, IPointerDownHandler
 
 
         int val = CountIntellect("Arg0"); //傷害值
-        hitEnemy.InterHit_IsDeath(val); //造成直接傷害
         hitEnemy.shield = Mathf.Clamp(hitEnemy.shield - val, 0, int.MaxValue);
-        
+        hitEnemy.InterHit_IsDeath(val); //造成直接傷害
+
         FatalAttackdetermination(); //確認傷害是否致死
         CardEffectEnd();//卡片效果結束
     }

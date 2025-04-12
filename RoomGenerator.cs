@@ -35,6 +35,7 @@ public class RoomGenerator : MonoBehaviour
     public List<GameObject> roadRooms = new List<GameObject>();
     public List<GameObject> CanBeTreasureRooms = new List<GameObject>();
     public List<GameObject> CanDestroyRooms = new List<GameObject>(); //可以被隨機摧毀的房間
+    public List<GameObject> DestroyedRooms = new List<GameObject>(); //被刪掉的房間
     public List<int> firstDestroyRoomsId = new List<int>(); //首先 重複的必須刪除
     public List<GameObject> guardianRooms = new List<GameObject>();
     public List<GameObject> treasureRoadRooms = new List<GameObject>();
@@ -122,6 +123,7 @@ public class RoomGenerator : MonoBehaviour
         RoomGener_Funs.Instance.TreasureRoomPath(this); //設定寶藏房路徑
 
         RoomGener_Funs.Instance.RoomDone(this); //設定 房間是否已經通關
+        RoomGener_Funs.Instance.SetRoomDestroy(this); //隨機刪除
 
         // 每個房間 設定關卡ID
         RoomGener_Funs.Instance.SetRoomLevel(this);

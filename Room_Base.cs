@@ -17,7 +17,7 @@ public class Room_Base : MonoBehaviour
         treasureRoom, //寶藏房間
         guardianRoom,//守護者房間
         treasureRoadRoom ///aaa
-        
+
     }
     public List<Type> type = new List<Type>();
     public int roomId;
@@ -86,5 +86,25 @@ public class Room_Base : MonoBehaviour
     public void set_StepToStart()
     {
         stepToStart = (int)(Mathf.Abs(transform.position.x / roomGenerator_.x_Offset) + Mathf.Abs(transform.position.z / roomGenerator_.z_Offset));
+    }
+    public bool isReachable = true; // 這個值可以讓你從外部設置，例如 Flood Fill 時用
+
+    void OnDrawGizmos()
+    {
+        // 畫房間方框
+        Gizmos.color = isReachable ? Color.green : Color.red;
+        Gizmos.DrawWireCube(transform.position, new Vector3(1f, 0.1f, 1f));
+
+        // 畫出與鄰居房間的連線（用來表示有門）
+        Gizmos.color = Color.cyan;
+
+        if (doorUp_ison)
+            Gizmos.DrawLine(transform.position, transform.position + Vector3.forward);
+        if (doorDown_ison)
+            Gizmos.DrawLine(transform.position, transform.position + Vector3.back);
+        if (doorLeft_ison)
+            Gizmos.DrawLine(transform.position, transform.position + Vector3.left);
+        if (doorRight_ison)
+            Gizmos.DrawLine(transform.position, transform.position + Vector3.right);
     }
 }

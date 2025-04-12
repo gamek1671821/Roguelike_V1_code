@@ -37,7 +37,7 @@ public class Card39_PosionPowerUp : CardItem
     }
     public override bool TryUse()
     {
-        int cost = int.Parse(data["Expend"]);
+        int cost = totalCost;
         int costPoisoned = FightManager.Instance.deBuffsVal[(int)DeBuffType.poisoned];
         if (!FightManager.Instance.canUseCard)
         {

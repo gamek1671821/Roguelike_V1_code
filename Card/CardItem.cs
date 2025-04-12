@@ -5,6 +5,7 @@ using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class CardItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerDownHandler
@@ -16,6 +17,8 @@ public class CardItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public TextMeshProUGUI msgText, costText;
     public string msgOriTxt, costOriTxt;
     private GameObject GoldObject;
+    public int costChange;
+    public int totalCost;
     public virtual void Init(Dictionary<string, string> data)
     {
         this.data = data;
@@ -93,9 +96,7 @@ public class CardItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         //設定卡牌名稱
         transform.Find("bg/nameTxt").GetComponent<TextMeshProUGUI>().text = data["Name"];
         //設定卡牌消耗
-        costText = transform.Find("bg/useTxt").GetComponent<TextMeshProUGUI>();
-        costOriTxt = data["Expend"];
-        costText.text = costOriTxt;
+        CostTxtChange();
         //設定卡牌名稱
         transform.Find("bg/Text").GetComponent<TextMeshProUGUI>().text = GameConfigManager.Instance.GetCardTypeById(data["Type"])["Name"];
         //設置背景image外邊框材質
@@ -115,7 +116,7 @@ public class CardItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     }
     public virtual bool TryUse()
     {
-        int cost = int.Parse(data["Expend"]);
+        int cost = totalCost;
         if (!FightManager.Instance.canUseCard)
         {
             UIManager.Instance.showTip("等待其他卡片效果結束", Color.red);
@@ -395,8 +396,11 @@ public class CardItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public virtual void CardEffectEnd(bool turnContinue = true)
     {
         UseCardCountPlus(data["Type"]);//計算卡牌
+        FightManager.Instance.Light_Heavy_TurnDown();
+        FightManager.Instance.AllHandCardCostChange();
         FightManager.Instance.CardEffectEnd(turnContinue);
         if (!turnContinue) DirectEnd(); //直接結束回合  
+
     }
     public void DirectEnd()
     {
@@ -475,6 +479,10 @@ public class CardItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public string CPurpT(object input)
     {
         return $"<color=#7D7DFF>{input}</color>";
+    }
+    public string CGreenT(object input)
+    {
+        return $"<color=#00DB00>{input}</color>";
     }
     public virtual void DamageText() { }
     public virtual void OnPointDamageText() { }
@@ -559,5 +567,24 @@ public class CardItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         }
         Cursor.visible = true; //跳出迴圈後顯示滑鼠
         UIManager.Instance.CloseUI("LineUI");
+    }
+    public void CostTxtChange()
+    {
+        costText = transform.Find("bg/useTxt").GetComponent<TextMeshProUGUI>();
+        int oriCost = int.Parse(data["Expend"]);
+        int costUp = 0;
+        int costDown = 0;
+        if (SceneManager.GetActiveScene().name == "battleScene") //只有在戰鬥場景才計算
+        {
+            costUp = FightManager.Instance.deBuffsVal[(int)DeBuffType.heavy];
+            costDown = FightManager.Instance.buffsVal[(int)BuffType.light];
+        }
+        totalCost = Mathf.Clamp(int.Parse(data["Expend"]) + costChange + costUp - costDown, 0, 99);
+        if (totalCost > oriCost)
+            costText.text = CPurpT(totalCost);
+        else if (totalCost < oriCost)
+            costText.text = CGreenT(totalCost);
+        else
+            costText.text = totalCost.ToString();
     }
 }
