@@ -31,7 +31,7 @@ public class Card21_ChiSlap : CardItem, IPointerDownHandler
         if (preHit == 0) hitEnemy.Hit((int)(val * 0.5f), false); //沒有貫穿 
         else
         {
-            hitEnemy.Hit(hitEnemy.shield + preHit * 2, false);
+            penetrate = hitEnemy.Hit(hitEnemy.shield + preHit * 2, false);
             FightManager.Instance.CurMoveCount += int.Parse(data["Expend"]); //回復動點
             MyFuns.Instance.RestoreHp(preHit * 2);
         }

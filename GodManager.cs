@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,7 +15,8 @@ public class GodManager : MonoBehaviour
     public bool isBattle;
     public bool isBossRoom;
     public string profession;
-    public
+    public event Action onPlayerWin, onPlayerEnd;
+    public string EventName;
 
     void Awake()
     {
@@ -82,4 +84,17 @@ public class GodManager : MonoBehaviour
         }
 
     }
+    public void TriggerPlayerWin()
+    {
+        onPlayerWin?.Invoke(); // 安全觸發
+    }
+    public void TriggerPlayerEnd()
+    {
+        onPlayerEnd?.Invoke(); // 安全觸發
+    }
+    public void ClearPlayerWinSubscribers()
+    {
+        onPlayerWin = null;
+    }
+
 }

@@ -27,7 +27,7 @@ public class Card04_BurnAttack : CardItem, IPointerDownHandler
         int preHit = Mathf.Clamp(hitEnemy.CheckHit(val), 0, int.MaxValue); //預先計算會貫穿多少傷害，直擊傷害給予效果
         int deBuffTurn = int.Parse(data["Arg1"]); //debuff持續時間 
 
-        hitEnemy.Hit(val,false);
+        penetrate = hitEnemy.Hit(val, false);
         hitEnemy.GetDeBuff(DeBuffType.burn, deBuffTurn, preHit);
         FatalAttackdetermination();
 

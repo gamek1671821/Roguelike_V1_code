@@ -11,7 +11,7 @@ public enum FightType
 }
 public enum BuffType
 {
-    power, hard, intellect, rebound, powerpoisoned, Lucky, ForeverShield, crazyIntellect, crazyPower, crazyPosion, CondenseKnife, Draw, Speed, Lurk, DragonPower, light
+    power, hard, intellect, rebound, powerpoisoned, Lucky, ForeverShield, crazyIntellect, crazyPower, crazyPosion, CondenseKnife, Draw, Speed, Lurk, DragonPower, light, WindSpell, Vampire
 }
 public enum DeBuffType
 {
@@ -24,7 +24,7 @@ public enum DeBuffType
 public class FightManager : MonoBehaviour
 {
     public static FightManager Instance;
-    public event Action onPlayerWin, onPlayerEnd; // 
+    //public event Action onPlayerWin, onPlayerEnd; // 
     public FightUnit fightUnit; //戰鬥單元 
     public FightType nowFightType;
     public int MaxHp;//最大血量
@@ -90,6 +90,15 @@ public class FightManager : MonoBehaviour
     }
     public void GetBuff(BuffType buffType, int turn, int val = 0)
     {
+        if (buffType == BuffType.power) //如果是提高力量的buff 
+        {
+            if (CrazyBeastNecklace) //擁有 野獸之力項鍊
+            {
+                MyFuns.Instance.ShowMessage($"觸發野獸之力項鍊");
+                val += 1;
+            }
+        }
+
         int buffId = (int)buffType;
         Transform tf = buffObj.transform.GetChild(buffId);
         tf.gameObject.SetActive(true);
@@ -289,9 +298,9 @@ public class FightManager : MonoBehaviour
         if (enemy != null) //受到來自敵人攻擊
         {
             hit += deBuffsVal[(int)DeBuffType.target];
-            if (AvoidOrb)
             {
-                AvoidOrb = false;
+                if (AvoidOrb)
+                    AvoidOrb = false;
                 int avoid = buffsVal[(int)BuffType.Lucky] * 3;
                 int Random = UnityEngine.Random.Range(0, 101);
                 if (avoid >= Random) //閃避
@@ -392,13 +401,11 @@ public class FightManager : MonoBehaviour
     }
     public void OnPlayerWin()
     {
-        if (onPlayerWin != null) //當沒有人註冊 = null
-            onPlayerWin.Invoke();
+        GodManager.Instance.TriggerPlayerWin();
     }
     public void OnPlayerEndTurn()
     {
-        if (onPlayerEnd != null) //當沒有人註冊 = null
-            onPlayerEnd.Invoke();
+        GodManager.Instance.TriggerPlayerEnd();
     }
     public void TurnEndResetCount()
     {
@@ -423,7 +430,7 @@ public class FightManager : MonoBehaviour
     public int PickCard(string type1) //輸入一個字串
     {
         int allCardCount = GameConfigManager.Instance.GetCardLines().Count;
-        Debug.Log($"allCardCount:{allCardCount}");
+        //Debug.Log($"allCardCount:{allCardCount}");
         bool noPick; //不可被選取
         int chose_;
         switch (type1)
@@ -601,5 +608,9 @@ public class FightManager : MonoBehaviour
             var task = taskQueue.Dequeue();
             task?.Invoke(); // 執行函式
         }
+    }
+    public void Heal(int input)
+    {
+        CurHp = Mathf.Clamp(CurHp + input, 0, MaxHp);
     }
 }

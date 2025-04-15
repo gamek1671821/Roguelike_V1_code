@@ -22,9 +22,9 @@ public class Card32_Attack2 : CardItem, IPointerDownHandler
         AudioManager.Instance.PlayEffect(data["sound"]);//音效 (無須修改)
         int val = CountAttack("Arg0"); //傷害值
         if (FightManager.Instance.thisTurnAttackCount >= 3) //當攻擊3次以上
-            hitEnemy.Hit(2 * val, false); //造成兩倍傷害
+            penetrate = hitEnemy.Hit(2 * val, false); //造成兩倍傷害
         else
-            hitEnemy.Hit(val, false); //造成傷害
+            penetrate = hitEnemy.Hit(val, false); //造成傷害
         FatalAttackdetermination(); //確認傷害是否致死
         CardEffectEnd();//卡片效果結束
     }
@@ -32,7 +32,7 @@ public class Card32_Attack2 : CardItem, IPointerDownHandler
     {
         string useCard = FightManager.Instance.lastCardType;
         bool canUse = useCard == "10001" || useCard == "10004";
-         int cost = totalCost;
+        int cost = totalCost;
         if (!FightManager.Instance.canUseCard)
         {
             UIManager.Instance.showTip("等待其他卡片效果結束", UnityEngine.Color.red);

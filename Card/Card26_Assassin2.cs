@@ -25,8 +25,9 @@ public class Card26_Assassin2 : CardItem, IPointerDownHandler
         AudioManager.Instance.PlayEffect(data["sound"]);//音效 (無須修改)
 
         int val = CountAttack("Arg0");
+        penetrate = val;
         hitEnemy.InterHit_IsDeath(val); //無視護甲 直接扣除生命
-        
+
         hitEnemy.GetDeBuff(DeBuffType.poisoned, 1, CountPowerPoisoned(int.Parse(data["Arg1"]))); //給予中毒 (貫穿傷害的兩倍)
         FatalAttackdetermination();
         CardEffectEnd(false);//卡片效果結束

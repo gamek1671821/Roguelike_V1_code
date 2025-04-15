@@ -25,6 +25,7 @@ public class Card25_Assassin : CardItem, IPointerDownHandler
         AudioManager.Instance.PlayEffect(data["sound"]);//音效 (無須修改)
 
         int val = CountAttack(CountAttack("Arg0")); //兩倍力量
+        penetrate = val; //無視護甲 直接吸血
         hitEnemy.InterHit_IsDeath(val); //無視護甲 直接扣除生命
         hitEnemy.updateShield();//更新護甲
         FatalAttackdetermination();

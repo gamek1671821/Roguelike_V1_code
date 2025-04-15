@@ -24,11 +24,11 @@ public class Card72_LuckyAttack : CardItem, IPointerDownHandler
         PlayEffect(hitEnemy.transform.position);//施放特效 (無須修改)
         AudioManager.Instance.PlayEffect(data["sound"]);//音效 (無須修改)
         int val = CountAttack("Arg0"); //傷害值
-        hitEnemy.Hit(val , false); //造成傷害
+        penetrate = hitEnemy.Hit(val, false); //造成傷害
         int val1 = CountAttack("Arg1"); //額外傷害
         if (LuckyProbability(0, 10)) //基礎機率0 , 每1幸運+10%機率
         {
-            hitEnemy.Hit(val1 , false); //造成額外傷害
+            penetrate += hitEnemy.Hit(val1, false); //造成額外傷害
         }
         FatalAttackdetermination(); //確認傷害是否致死
         CardEffectEnd();//卡片效果結束

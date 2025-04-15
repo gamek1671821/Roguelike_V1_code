@@ -21,7 +21,7 @@ public class Card08_AddCard4 : CardItem, IPointerDownHandler
         AudioManager.Instance.PlayEffect(data["sound"]);//音效 (無須修改)
         //指定一名敵人，從牌組抽出{0}張卡發動。從牌組抽出{1}張卡，造成{1}傷害
         int val = CountAttack("Arg1"); //傷害值
-        hitEnemy.Hit(val , false);
+        penetrate = hitEnemy.Hit(val, false);
         FatalAttackdetermination();
 
         val = int.Parse(data["Arg0"]) + int.Parse(data["Arg1"]); //抽卡數量

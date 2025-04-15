@@ -1,19 +1,19 @@
+using System.Collections;
+using UnityEngine;
+using System.Collections.Generic;
 using UnityEngine.EventSystems;
-public class Card28_AllChi : CardItem
+
+public class Card96_WindSpell : CardItem
 {
     public override void OnPointerDown(PointerEventData eventData) { }
     public override void OnEndDrag(PointerEventData eventData)
+    // 將所有增益時間延長1回合，所有減益時間、效果縮短1回合。
     {
         if (!UIManager.Instance.GetUI<FightUI>("FightUI").isMouseInHandZone() && TryUse())
         {
-            //獲得3力量、智力
             EffAndAudio();
-            //獲得力量與智力
-            int powerval = int.Parse(data["Arg0"]);
-            
-            FightManager.Instance.GetBuff(BuffType.power, 99, powerval);
-            FightManager.Instance.GetBuff(BuffType.intellect, 99, int.Parse(data["Arg0"]));
-            //刷新數值
+
+            FightManager.Instance.GetBuff(BuffType.WindSpell, 99, 1);
             CardEffectEnd();//卡片效果結束
         }
         else

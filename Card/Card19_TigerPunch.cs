@@ -24,18 +24,13 @@ public class Card19_TigerPunch : CardItem, IPointerDownHandler
         AudioManager.Instance.PlayEffect(data["sound"]);//音效 (無須修改)
 
         int powerval = 2;
-        if (FightManager.Instance.CrazyBeastNecklace) //野獸之力項鍊
-        {
-            MyFuns.Instance.ShowMessage($"觸發野獸之力項鍊");
-            powerval += 1;
-        }
 
         FightManager.Instance.GetBuff(BuffType.power, 99, powerval); //獲得2力量
         FightManager.Instance.GetDeBuff(DeBuffType.dePower, 1, 2); //獲得2脫力
 
         int val = CountAttack("Arg0"); //傷害值
 
-        hitEnemy.Hit(val, false);
+        penetrate = hitEnemy.Hit(val, false);
         hitEnemy.GetDeBuff(DeBuffType.dePower, 999, 1);
 
         FatalAttackdetermination();

@@ -28,11 +28,6 @@ public class Card84_StartCoin : CardItem, IPointerDownHandler
 
         if (FightManager.Instance.buffsVal[(int)BuffType.Lucky] >= 3)
         {
-            if (FightManager.Instance.CrazyBeastNecklace) //野獸之力項鍊
-            {
-                MyFuns.Instance.ShowMessage($"觸發野獸之力項鍊");
-                powerval += val;
-            }
             FightManager.Instance.GetBuff(BuffType.power, 99, powerval); //必定獲得力量
         }
         else

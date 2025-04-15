@@ -283,17 +283,19 @@ public class Enemy : MonoBehaviour
     {
         return val - FightManager.Instance.shieldCount;
     }
-    public void Hit(int val, bool directAttack)
+    public int Hit(int val, bool NonSpecify)
     {
-        if (!directAttack) //如果不是 直接攻擊 
+        int penetrate ; //紀錄貫穿多少傷害
+        if (!NonSpecify) //如果不是非指定攻擊  (會受到反傷與針對)
         {
             val += deBuffsVal[(int)DeBuffType.target];
         }
-        if (shield >= val)
+        if (shield >= val) //非貫穿
         {
             shield -= val;
             ani.Play("hit", 0, 0);
             MyFuns.Instance.ShowMessage($"{data["Name"]}擋下{val}傷害", MyFuns.MessageType.Enemy);
+            penetrate = 0;
         }
         else
         {
@@ -301,6 +303,7 @@ public class Enemy : MonoBehaviour
             shield = 0;
             curHp -= val;
             MyFuns.Instance.ShowMessage($"{data["Name"]}受到{val}傷害", MyFuns.MessageType.Enemy);
+            penetrate = val;
         }
 
         if (data["Dragon"] == "T")
@@ -320,16 +323,17 @@ public class Enemy : MonoBehaviour
         if (curHp <= deathLine)
         {
             curHp = 0; //生命歸零
-            MyFuns.Instance.ShowMessage($"擊殺{data["Name"]} ({deathLine})");
+            MyFuns.Instance.ShowMessage($"擊殺{data["Name"]} (死亡線：{deathLine})");
             DieSetting();
         }
         else
         {
             ani.Play("hit", 0, 0);
-            if (!directAttack) FightManager.Instance.GetPlayerHit(buffsVal[(int)BuffType.rebound]);
+            if (!NonSpecify) FightManager.Instance.GetPlayerHit(buffsVal[(int)BuffType.rebound]);
         }
         updateShield();
         updateHp();
+        return penetrate;
     }
     public bool InterHit_IsDeath(int val, bool closeMessgae = false)
     {

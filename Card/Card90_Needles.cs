@@ -33,7 +33,7 @@ public class Card90_Needles : CardItem, IPointerDownHandler
         if (hitEnemy.shield > 0) { }//無傷害
         else
         {
-            hitEnemy.Hit(val , false);
+            penetrate = hitEnemy.Hit(val, false);
             if (hitEnemy.data["heart"] == "T")
                 hitEnemy.GetDeBuff(DeBuffType.dePower, 99, 1);
         }

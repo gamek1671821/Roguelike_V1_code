@@ -33,20 +33,27 @@ public class Fight_PlayerStart : FightUnit
 
             if (FightManager.Instance.buffsTurn[(int)BuffType.crazyIntellect] > 0 && !isDeath) //當有瘋狂知識
             {
-                FightManager.Instance.GetBuff(BuffType.intellect, 999, 1);
-                isDeath = FightManager.Instance.InterHit_IsDeath(2, true);
+                int buffsVal = FightManager.Instance.buffsVal[(int)BuffType.crazyIntellect];
+                FightManager.Instance.GetBuff(BuffType.intellect, 999, buffsVal);
+                isDeath = FightManager.Instance.InterHit_IsDeath(2 * buffsVal, true);
             }
-            if (FightManager.Instance.buffsTurn[(int)BuffType.crazyPower] > 0 && !isDeath) //當有瘋狂知識
+            if (FightManager.Instance.buffsTurn[(int)BuffType.crazyPower] > 0 && !isDeath) //當有惡魔契約
             {
-                FightManager.Instance.GetBuff(BuffType.power, 999, 1);
-                isDeath = FightManager.Instance.InterHit_IsDeath(2, true);
+                int buffsVal = FightManager.Instance.buffsVal[(int)BuffType.crazyPower];
+                FightManager.Instance.GetBuff(BuffType.power, 999, buffsVal);
+                isDeath = FightManager.Instance.InterHit_IsDeath(2 * buffsVal, true);
             }
             if (FightManager.Instance.buffsTurn[(int)BuffType.CondenseKnife] > 0 && !isDeath) //當有凝聚小刀
             {
-
-                MyFuns.Instance.GetKnife(FightManager.Instance.buffsVal[(int)BuffType.CondenseKnife]); //放X張刀刃到牌頂
+                int buffsVal = FightManager.Instance.buffsVal[(int)BuffType.CondenseKnife];
+                MyFuns.Instance.GetKnife(buffsVal); //放X張刀刃到牌頂
             }
-            
+            if (FightManager.Instance.buffsTurn[(int)BuffType.WindSpell] > 0 && !isDeath) //當有風行咒
+            {
+                int buffsVal = FightManager.Instance.buffsVal[(int)BuffType.WindSpell];
+                FightManager.Instance.GetBuff(BuffType.light, buffsVal, 1);
+            }
+
 
 
 

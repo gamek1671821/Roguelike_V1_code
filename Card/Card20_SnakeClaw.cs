@@ -30,7 +30,7 @@ public class Card20_SnakeClaw : CardItem, IPointerDownHandler
         if (preHit == 0) hitEnemy.Hit((int)(val * 0.5f), false); //沒有貫穿 
         else
         {
-            hitEnemy.Hit(hitEnemy.shield + preHit * 2, false);
+            penetrate = hitEnemy.Hit(hitEnemy.shield + preHit * 2, false);
             int deBuffTurn = int.Parse(data["Arg1"]); //buff持續時間 
             hitEnemy.GetDeBuff(DeBuffType.poisoned, deBuffTurn, CountPowerPoisoned(preHit * 2)); //給予中毒 (貫穿傷害的兩倍再加上猛毒)
         }

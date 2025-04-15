@@ -12,7 +12,7 @@ public class Card03_RangeAttack : CardItem
             //發動效果 {對全部敵人造成傷害}
             foreach (var enemy in EnemyManager.Instance.enemyList)
             {
-                enemy.Hit(val , true);
+                enemy.Hit(val , true); //疊加紀錄 貫穿傷害
             }
             FatalAttackdetermination(); //在全部攻擊完後才計算死亡 (否則敵人數量會改變)
 

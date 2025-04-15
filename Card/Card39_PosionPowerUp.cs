@@ -16,11 +16,7 @@ public class Card39_PosionPowerUp : CardItem
             FightManager.Instance.GetBuff(BuffType.powerpoisoned, 999, (int)(Poisoned * 0.5f)); //根據劇毒疊層獲得猛毒
 
             int powerval = (int)(Poisoned * 0.5f);
-            if (FightManager.Instance.CrazyBeastNecklace) //野獸之力項鍊
-            {
-                MyFuns.Instance.ShowMessage($"觸發野獸之力項鍊");
-                powerval += 1;
-            }
+
             FightManager.Instance.GetBuff(BuffType.power, 999, powerval); //根據劇毒疊層獲得猛毒
             FightManager.Instance.deBuffsVal[(int)DeBuffType.poisoned] = 0; // 獲得劇毒疊層歸零
 

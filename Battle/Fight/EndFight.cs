@@ -13,16 +13,16 @@ public class EndFight : MonoBehaviour
     private int allCardCount;
     void Start()
     {
-        FightManager.Instance.onPlayerWin += WinEnd;
+        GodManager.Instance.onPlayerWin += WinEnd;
     }
     void OnDestroy()
     {
-        FightManager.Instance.onPlayerWin -= WinEnd;
+        GodManager.Instance.ClearPlayerWinSubscribers();
     }
     public void WinEnd()
     {
-
         FightManager.Instance.WinSettlement();
+        MyEvent.Instance.TriggerEventByName(GodManager.Instance.EventName);
 
         StartCoroutine(Useing());
     }

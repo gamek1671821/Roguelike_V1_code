@@ -16,9 +16,10 @@ public class CardItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     Vector2 initPos; //開始拖曳時 紀錄卡牌位置
     public TextMeshProUGUI msgText, costText;
     public string msgOriTxt, costOriTxt;
-    private GameObject GoldObject;
     public int costChange;
     public int totalCost;
+    public int penetrate;
+    public bool showGold = true;
     public virtual void Init(Dictionary<string, string> data)
     {
         this.data = data;
@@ -34,7 +35,7 @@ public class CardItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         AudioManager.Instance.PlayEffect("Cards/draw");
         DragMsgChange();
 
-        Debug.Log($"cardPools: {string.Join(", ", cardPools)}");
+        //Debug.Log($"cardPools: {string.Join(", ", cardPools)}");
     }
     public virtual void DragMsgChange() { }
     /// <summary>
@@ -104,9 +105,10 @@ public class CardItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         //設定卡牌稀有度與ID
         transform.Find("bg/cardID").GetComponent<TextMeshProUGUI>().text = $"{data["Rarity"]} {data["Id"]}";
 
-        if (GetType().Name == "CardItemShowOnly" || GetType().Name == "CardItemShowOnly_Book")
+        if (GetType().Name == "CardItemShowOnly")
         {
-            transform.Find("bg/Gold").gameObject.SetActive(true);//GoldTxt
+            transform.Find("bg/Gold").gameObject.SetActive(showGold);//GoldTxt
+            
             transform.Find("bg/Gold/GoldTxt").GetComponent<TextMeshProUGUI>().text = data["Gold"];
         }
         else
@@ -393,14 +395,24 @@ public class CardItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     }
 
-    public virtual void CardEffectEnd(bool turnContinue = true)
+    public void CardEffectEnd(bool turnContinue = true)
     {
+        VampireEff();
         UseCardCountPlus(data["Type"]);//計算卡牌
         FightManager.Instance.Light_Heavy_TurnDown();
         FightManager.Instance.AllHandCardCostChange();
         FightManager.Instance.CardEffectEnd(turnContinue);
         if (!turnContinue) DirectEnd(); //直接結束回合  
 
+    }
+    private void VampireEff()
+    { //吸血效果
+        if (data["Type"] == "10001" || data["Type"] == "10004")
+        {
+            int healHP = (int)((penetrate / 10) + 1);
+            if (penetrate > 0)
+                FightManager.Instance.Heal(healHP); //回復貫穿
+        }
     }
     public void DirectEnd()
     {

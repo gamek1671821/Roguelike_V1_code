@@ -23,11 +23,6 @@ public class Card67_WarCard : CardItem
             if (FightManager.Instance.thisTurnDefendCount >= 3) //防禦卡3
             {
                 int powerval = 1;
-                if (FightManager.Instance.CrazyBeastNecklace) //野獸之力項鍊
-                {
-                    MyFuns.Instance.ShowMessage($"觸發野獸之力項鍊");
-                    powerval += 1;
-                }
                 FightManager.Instance.GetBuff(BuffType.power, 99, powerval);
             }
 

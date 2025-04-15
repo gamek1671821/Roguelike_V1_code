@@ -19,8 +19,7 @@ public class Card14_EatCard : CardItem
                 FightManager.Instance.thisTurnDestroyCount++; //移除計數器加1
             }
             UIManager.Instance.GetUI<FightUI>("FightUI").UpdateCardCount(); //更新卡牌數量
-            FightManager.Instance.CurHp += int.Parse(data["Arg1"]); //獲得生命
-                                                                    //刷新數值
+            FightManager.Instance.Heal(int.Parse(data["Arg1"])) ; //獲得生命
             CardEffectEnd();//卡片效果結束
         }
         else

@@ -24,7 +24,7 @@ public class Card86_SpeedUpAttack : CardItem, IPointerDownHandler
 
         int power = FightManager.Instance.CurMoveCount;
         int val = CountAttack(power); //傷害值
-        hitEnemy.Hit(val, false); //造成傷害
+        penetrate = hitEnemy.Hit(val, false); //造成傷害
         FatalAttackdetermination(); //確認傷害是否致死
         FightManager.Instance.GetBuff(BuffType.Speed, 1, power + 1);
         FightManager.Instance.CurMoveCount = 0;

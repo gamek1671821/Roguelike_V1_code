@@ -22,7 +22,7 @@ public class Card00_Attack : CardItem, IPointerDownHandler
         PlayEffect(hitEnemy.transform.position);//施放特效 (無須修改)
         AudioManager.Instance.PlayEffect(data["sound"]);//音效 (無須修改)
         int val = CountAttack("Arg0"); //傷害值
-        hitEnemy.Hit(val , false); //造成傷害
+        penetrate = hitEnemy.Hit(val, false); //造成傷害 (並且記錄貫穿傷害)
         FatalAttackdetermination(); //確認傷害是否致死
         CardEffectEnd();//卡片效果結束
     }

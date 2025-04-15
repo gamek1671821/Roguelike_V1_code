@@ -12,11 +12,6 @@ public class Card05_Power : CardItem
             //使用效果
             int val = int.Parse(data["Arg1"]);
             //獲得攻擊力
-            if (FightManager.Instance.CrazyBeastNecklace) //野獸之力項鍊
-            {
-                MyFuns.Instance.ShowMessage($"觸發野獸之力項鍊");
-                val += 1;
-            }
             FightManager.Instance.GetBuff(BuffType.power, 999, val);
             CardEffectEnd();//卡片效果結束
         }
@@ -46,7 +41,6 @@ public class Card05_Power : CardItem
             FightManager.Instance.canUseCard = false;
             //減少費用 -> 生命
             FightManager.Instance.InterHit_IsDeath(cost, true);
-            MyFuns.Instance.ShowMessage($"失去{cost}生命");
 
             UIManager.Instance.GetUI<FightUI>("FightUI").RemoveCard(this, data["isBanishCard"]);
             return true;

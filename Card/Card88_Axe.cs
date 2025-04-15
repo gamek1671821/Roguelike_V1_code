@@ -29,7 +29,7 @@ public class Card88_Axe : CardItem, IPointerDownHandler
         else
         {
             hitEnemy.shield = 0;
-            hitEnemy.Hit((int)(preHit / 2), false); //貫穿後傷害 兩倍傷害回調
+            penetrate = hitEnemy.Hit((int)(preHit / 2), false); //貫穿後傷害 兩倍傷害回調
         }
 
         FatalAttackdetermination();

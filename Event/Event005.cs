@@ -75,10 +75,9 @@ public class Event005 : EventBase
         {//獲得某樣道具
             GodManager.Instance.isBattle = true;
             GodManager.Instance.Res = 10005;
+            GodManager.Instance.EventName = "Event005_SP";
             UnityEngine.SceneManagement.SceneManager.LoadScene("battleScene");
 
-            MyFuns.Instance.level.levelDone.Add(int.Parse(data["Id"]));
-            MyFuns.Instance.SaveLevel();
             EndChoose(true);
         }
     }

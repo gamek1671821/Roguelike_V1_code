@@ -47,7 +47,7 @@ public class EnemyManager
                 Enemy enemy = obj.AddComponent(System.Type.GetType(enemyData["Script"])) as Enemy;//添加腳本
                 enemy.Init(enemyData);// 儲存敵人訊息
                 enemyList.Add(enemy);
-                Debug.Log(enemy);
+                //Debug.Log(enemy);
                 obj.transform.position = new Vector3(x, y, z);
 
             }

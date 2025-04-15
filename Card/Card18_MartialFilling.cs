@@ -12,11 +12,6 @@ public class Card18_MartialFilling : CardItem
             //獲得攻擊力
             int val = int.Parse(data["Arg0"]);
             int powerVal = val;
-            if (FightManager.Instance.CrazyBeastNecklace) //野獸之力項鍊
-            {
-                MyFuns.Instance.ShowMessage($"觸發野獸之力項鍊");
-                powerVal += 1;
-            }
             FightManager.Instance.GetBuff(BuffType.power, 99, powerVal);
             //獲得硬甲
             FightManager.Instance.GetBuff(BuffType.hard, 99, val);

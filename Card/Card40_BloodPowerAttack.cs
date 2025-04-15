@@ -24,13 +24,13 @@ public class Card40_BloodPowerAttack : CardItem, IPointerDownHandler
         PlayEffect(hitEnemy.transform.position);//施放特效 (無須修改)
         AudioManager.Instance.PlayEffect(data["sound"]);//音效 (無須修改)
         int val = CountDefend(CountAttack("Arg0")); //傷害值
-        hitEnemy.Hit(val, false); //造成傷害
+        penetrate = 2 * hitEnemy.Hit(val, false); //造成傷害 (貫穿計算為兩倍)
         FatalAttackdetermination(); //確認傷害是否致死
         CardEffectEnd();//卡片效果結束
     }
     public override bool TryUse()
     {
-          int cost = totalCost;
+        int cost = totalCost;
         int costPoisoned = FightManager.Instance.deBuffsVal[(int)DeBuffType.poisoned];
         bool isLowHp = FightManager.Instance.CurHp <= FightManager.Instance.MaxHp * 0.3f;
         if (!FightManager.Instance.canUseCard)

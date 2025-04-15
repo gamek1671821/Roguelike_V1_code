@@ -24,7 +24,7 @@ public class Card11_ShieldAttack2 : CardItem, IPointerDownHandler
         PlayEffect(hitEnemy.transform.position);//施放特效 (無須修改)
         AudioManager.Instance.PlayEffect(data["sound"]);//音效 (無須修改)
         int val = CountAttack("Arg0"); //傷害值
-        hitEnemy.Hit(val , false) ;
+        penetrate = hitEnemy.Hit(val , false) ;
         FatalAttackdetermination();
 
         val = CountDisappoint(CountDefend("Arg1")); //護甲值
